@@ -1,0 +1,12 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @project.title %></h1>
+
+<% @project.project_cards.each do |project_card| %>
+  <img src="<%= project_card.card.img %>" width="200px" height="100px">
+  <p><%= project_card.content %></p>
+<% end %>
+
+
+<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Back', projects_path %>

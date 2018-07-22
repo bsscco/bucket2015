@@ -1,0 +1,50 @@
+<%= javascript_include_tag 'application' %>
+
+<%= form_with(model: project, local: true) do |form| %>
+  <% if project.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+
+      <ul>
+        <% project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <p>내 사진 목록</p>
+    <% current_user.cards.each do |card| %>
+      <ul>
+        <img src="<%= card.img %>" width="100px" height="50px"><%= card.content %>
+        <input type="button" value="추가" onclick="addCardItem(<%= card %>)"></input></li>
+      </ul>
+    <% end %>
+  </div>
+
+  <hr>
+
+  <div class="field">
+    <%= form.label :title %><br/>
+    <%= form.text_field :title %>
+  </div>
+
+  <div id="card-list"></div>
+
+  <% current_user.cards.each_with_index do |card, idx| %>
+    <input type="hidden" name="project[project_cards_attributes][<%= idx %>][card_id]" value="<%= card.id %>"><br>
+    <img src="<%= card.img %>" width="200px" height="100px"><br>
+    <input type="text" name="project[project_cards_attributes][<%= idx %>][content]"><br>
+  <% end %>
+
+  <%#= form.fields_for :cards do |form2| %>
+    <%#= form2.hidden_field :id, value: form2.object.id %>
+<!--    <img src="<%#= form2.object.img %>" width="200px" height="100px"><br>-->
+    <%#= form2.text_field :content %>
+  <%# end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
