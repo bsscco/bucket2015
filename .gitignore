@@ -31,3 +31,5 @@
 
 .idea
 .ruby-version
+
+/public/uploads
