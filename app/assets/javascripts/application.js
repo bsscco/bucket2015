@@ -14,12 +14,3 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
-
-function addCardItem(card) {
-    const child = document.createElement('img');
-    child.setAttribute('width', '200px');
-    child.setAttribute('height', '100px');
-    child.setAttribute('src', card.img);
-    child.setAttribute('margin', 'auto');
-    document.getElementById('card-list').appendChild(child);
-}

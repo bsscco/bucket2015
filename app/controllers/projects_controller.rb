@@ -25,8 +25,31 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-    @project = Project.new(project_params)
+    @project = Project.new
     @project.user = current_user
+    @project.title = params[:project][:title];
+    project_cards = params[:project][:project_cards_attributes];
+    project_cards.each do |project_card|
+      if project_card[1][:card_id] == "0"
+        newCard = Card.new(img: project_card[1][:img], content: project_card[1][:content])
+        newCard.user = current_user;
+        newCard.save
+        newProjectCard = ProjectCard.new
+        newProjectCard.card_id = newCard.id;
+        newProjectCard.content = newCard.content;
+        @project.project_cards.push newProjectCard
+      else
+        newProjectCard = ProjectCard.new
+        newProjectCard.card_id = project_card[1][:card_id];
+        newProjectCard.content = project_card[1][:content];
+        @project.project_cards.push newProjectCard
+      end
+    end
+
+    # @project = Project.new(project_params)
+    # @project.user = current_user
+
+
 
     respond_to do |format|
       if @project.save

@@ -1,6 +1,7 @@
-<%= javascript_include_tag 'application' %>
+<%#= javascript_include_tag 'application' %>
+<%#= javascript_include_tag 'https://cdn.jsdelivr.net/npm/vue' %>
 
-<%= form_with(model: project, local: true) do |form| %>
+<%= form_with(model: project, local: true, multipart: true) do |form| %>
   <% if project.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
@@ -15,11 +16,10 @@
 
   <div>
     <p>내 사진 목록</p>
-    <% current_user.cards.each do |card| %>
-      <ul>
-        <img src="<%= card.img %>" width="100px" height="50px"><%= card.content %>
-        <input type="button" value="추가" onclick="addCardItem(<%= card %>)"></input></li>
-      </ul>
+    <% current_user.cards.each_with_index do |card, idx| %>
+      <div style="display: inline-block; border: 1px solid red;" onclick="addCardItem(<%= card.id %>, '<%= card.img %>')">
+        <img src="<%= card.img %>" width="100px" height="50px"><br>추가
+      </div>
     <% end %>
   </div>
 
@@ -30,21 +30,81 @@
     <%= form.text_field :title %>
   </div>
 
-  <div id="card-list"></div>
+  <div id="card-list">
 
-  <% current_user.cards.each_with_index do |card, idx| %>
-    <input type="hidden" name="project[project_cards_attributes][<%= idx %>][card_id]" value="<%= card.id %>"><br>
-    <img src="<%= card.img %>" width="200px" height="100px"><br>
-    <input type="text" name="project[project_cards_attributes][<%= idx %>][content]"><br>
-  <% end %>
 
-  <%#= form.fields_for :cards do |form2| %>
-    <%#= form2.hidden_field :id, value: form2.object.id %>
-<!--    <img src="<%#= form2.object.img %>" width="200px" height="100px"><br>-->
-    <%#= form2.text_field :content %>
-  <%# end %>
+  </div>
+  <input type="button" value="사진 추가" onclick="openFileSelect()">
 
   <div class="actions">
     <%= form.submit %>
   </div>
 <% end %>
+
+<div id="card-item-prototype" style="display: none;">
+  <input class="card-id" type="hidden"><br>
+  <img class="card-img" src="" width="200px" height="100px"><br>
+  <input class="card-content" type="text"><br>
+</div>
+
+<div id="photo-item-prototype" style="display: none;">
+  <input class="card-id" type="hidden"><br>
+  <input style="display: none;" type="file" class="card-img-file" accept="image/*" data-path="uploads/cards/projects" multiple="multiple">
+  <img class="card-img" src="" width="200px" height="100px"><br>
+  <input class="card-content" type="text"><br>
+</div>
+
+<script>
+    function addCardItem(cardId, cardImg) {
+        const cardList = document.getElementById('card-list');
+        const newCardItem = document.getElementById('card-item-prototype').cloneNode(true);
+        newCardItem.style = 'display: block;';
+        const idx = cardList.children.length;
+        newCardItem.getElementsByClassName('card-id').item(0).name = 'project[project_cards_attributes][' + idx + '][card_id]';
+        newCardItem.getElementsByClassName('card-id').item(0).value = cardId;
+        newCardItem.getElementsByClassName('card-img').item(0).src = cardImg;
+        newCardItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards_attributes][' + idx + '][content]';
+        cardList.appendChild(newCardItem);
+    }
+
+    function openFileSelect() {
+        const cardList = document.getElementById('card-list');
+        const newCardItem = document.getElementById('photo-item-prototype').cloneNode(true);
+        const idx = cardList.children.length;
+        newCardItem.getElementsByClassName('card-id').item(0).name = 'project[project_cards_attributes][' + idx + '][card_id]';
+        newCardItem.getElementsByClassName('card-id').item(0).value = 0;
+        newCardItem.getElementsByClassName('card-img-file').item(0).name = 'project[project_cards_attributes][' + idx + '][img]';
+        newCardItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards_attributes][' + idx + '][content]';
+        cardList.appendChild(newCardItem);
+        newCardItem.getElementsByClassName('card-img-file').item(0).click();
+        newCardItem.getElementsByClassName('card-img-file').item(0).onchange = function(e) {
+            if(e.target.value !== '') {
+                newCardItem.style = 'display: block;';
+                const oFReader = new FileReader();
+                oFReader.readAsDataURL(newCardItem.getElementsByClassName('card-img-file').item(0).files[0]);
+
+                oFReader.onload = function (oFREvent) {
+                    newCardItem.getElementsByClassName('card-img').item(0).src = oFREvent.target.result;
+                };
+            } else {
+                cardList.removeChild(newCardItem);
+            }
+        };
+    }
+
+    // const eventBus = new Vue();
+    //
+    // const cardItem = {
+    //     template: '<div>hi</div>'
+    // }
+    // new Vue({
+    //     el: '#card-list',
+    //     data: {
+    //         cards: ['a', 'b', 'c']
+    //     },
+    //     components: {
+    //         'card-item': cardItem
+    //     }
+    // });
+</script>
+
