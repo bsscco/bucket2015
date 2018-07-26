@@ -3,5 +3,5 @@ class Card < ApplicationRecord
   has_many :project_cards
   has_many :projects, through: :project_cards
 
-  mount_uploader :img, CardUploader
+  mount_uploader :img, S3Uploader
 end
