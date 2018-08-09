@@ -20,6 +20,9 @@ class CardsController < ApplicationController
 
   # GET /cards/1/edit
   def edit
+    if @card.user_id != current_user.id
+      redirect_to @card, notice: 'Forbidden'
+    end
   end
 
   # POST /cards

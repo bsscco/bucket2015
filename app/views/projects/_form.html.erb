@@ -1,110 +1,175 @@
-<%#= javascript_include_tag 'application' %>
-<%#= javascript_include_tag 'https://cdn.jsdelivr.net/npm/vue' %>
+<div class="container" style="margin-top: 20px;">
+  <form enctype="multipart/form-data" action="<%= project.id ? ("/projects/#{@project.id}") : '/projects' %>" accept-charset="UTF-8" method="post">
+    <input name="utf8" type="hidden" value="✓">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <% if @project.id %>
+      <input type="hidden" name="_method" value="patch">
+    <% end %>
 
-<%= form_with(model: project, local: true, multipart: true) do |form| %>
-  <% if project.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+    <% if @project.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@project.errors.count, "error") %> prohibited this project from being saved:</h2>
 
-      <ul>
-        <% project.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div>
-    <p>내 사진 목록</p>
-    <% current_user.cards.each_with_index do |card, idx| %>
-      <div style="display: inline-block; border: 1px solid red;" onclick="addCardItem(<%= card.id %>, '<%= card.img %>')">
-        <img src="<%= card.img %>" width="100px" height="50px"><br>추가
+        <ul>
+          <% @project.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
-  </div>
 
-  <hr>
+    <div class="form-group">
+      <label>내 사진 목록</label><br>
+      <% current_user.cards.each do |card| %>
+        <div class="card" style="width: 10rem; display:inline-flex">
+          <img class="card-img-top" src="<%= card.img %>" alt="Card image cap">
+          <div class="card-body">
+            <div class="btn btn-link" onclick="addCardItem(<%= card.id %>, '<%= card.img %>')">사진 추가</div>
+          </div>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= form.label :title %><br/>
-    <%= form.text_field :title %>
-  </div>
+    <div class="form-group">
+      <label>제목</label>
+      <input type="text" class="form-control" name="project[title]" value="<%= @project.title %>">
+    </div>
 
-  <div id="card-list">
+    <div id="card-list">
+      <% if @project.id %>
+        <% @project.project_cards.each_with_index do |m, idx| %>
+          <div class="card-item" style="margin-bottom: 20px;">
+            <input type="hidden" name="project[project_cards][<%= idx %>][id]" value="<%= m.id %>">
+            <input class="card-id" type="hidden" name="project[project_cards][<%= idx %>][card_id]" value="<%= m.card_id %>">
+            <input class="card-position" type="hidden" name="project[project_cards][<%= idx %>][position]" value="<%= m.position %>">
+            <div>
+              <div style="display: inline-block;">
+                <button type="button" class="btn btn-light up" style="width: 100px;" onclick="upCardItem(<%= idx %>)">위로</button>
+                <br>
+                <button type="button" class="btn btn-light down" style="width: 100px;" onclick="downCardItem(<%= idx %>)">아래로</button>
+              </div>
+              <img class="card-img" style="width: auto;" src="<%= m.card.img %>"><br>
+            </div>
+            <textarea class="card-content form-control" rows="3" style="margin-top: 10px;" name="project[project_cards][<%= idx %>][content]"><%= m.content %></textarea>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
 
+    <input type="button" class="btn btn-primary" value="사진 추가" onclick="openImgSelector()">
 
-  </div>
-  <input type="button" value="사진 추가" onclick="openFileSelect()">
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
-
-<div id="card-item-prototype" style="display: none;">
-  <input class="card-id" type="hidden"><br>
-  <img class="card-img" src="" width="200px" height="100px"><br>
-  <input class="card-content" type="text"><br>
+    <input type="submit" class="btn btn-primary" name="commit" value="<%= @project.id ? '수정하기' : '만들기' %>">
+  </form>
 </div>
 
-<div id="photo-item-prototype" style="display: none;">
-  <input class="card-id" type="hidden"><br>
-  <input style="display: none;" type="file" class="card-img-file" accept="image/*" data-path="uploads/cards/projects" multiple="multiple">
-  <img class="card-img" src="" width="200px" height="100px"><br>
-  <input class="card-content" type="text"><br>
+<div id="card-item-prototype" style="display: none; margin-bottom: 20px;">
+  <input class="card-id" type="hidden">
+  <input class="card-position" type="hidden">
+  <div>
+    <div style="display: inline-block;">
+      <button type="button" class="btn btn-light up" style="width: 100px;">위로</button>
+      <br>
+      <button type="button" class="btn btn-light down" style="width: 100px;">아래로</button>
+    </div>
+    <img class="card-img" style="width: auto;"><br>
+  </div>
+  <textarea class="card-content form-control" rows="3" style="margin-top: 10px;"></textarea>
+</div>
+
+<div id="photo-item-prototype" style="display: none; margin-bottom: 20px;">
+  <input class="card-id" type="hidden">
+  <input class="card-position" type="hidden">
+  <div>
+    <div style="display: inline-block;">
+      <button type="button" class="btn btn-light up" style="width: 100px;">위로</button>
+      <br>
+      <button type="button" class="btn btn-light down" style="width: 100px;">아래로</button>
+    </div>
+    <input style="display: none;" type="file" class="card-img-file" accept="image/*" data-path="uploads/cards/projects" multiple="multiple">
+    <img class="card-img" style="width: auto;"><br>
+  </div>
+  <textarea class="card-content form-control" rows="3" style="margin-top: 10px;"></textarea>
 </div>
 
 <script>
     function addCardItem(cardId, cardImg) {
         const cardList = document.getElementById('card-list');
-        const newCardItem = document.getElementById('card-item-prototype').cloneNode(true);
-        newCardItem.style = 'display: block;';
+        const newItem = document.getElementById('card-item-prototype').cloneNode(true);
+        newItem.style['display'] = 'block';
         const idx = cardList.children.length;
-        newCardItem.getElementsByClassName('card-id').item(0).name = 'project[project_cards_attributes][' + idx + '][card_id]';
-        newCardItem.getElementsByClassName('card-id').item(0).value = cardId;
-        newCardItem.getElementsByClassName('card-img').item(0).src = cardImg;
-        newCardItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards_attributes][' + idx + '][content]';
-        cardList.appendChild(newCardItem);
+        newItem.class = 'card-item';
+        newItem.getElementsByClassName('card-id').item(0).name = 'project[project_cards][' + idx + '][card_id]';
+        newItem.getElementsByClassName('card-id').item(0).value = cardId;
+        newItem.getElementsByClassName('card-position').item(0).name = 'project[project_cards][' + idx + '][position]';
+        newItem.getElementsByClassName('card-position').item(0).value = idx;
+        newItem.getElementsByClassName('card-img').item(0).src = cardImg;
+        newItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards][' + idx + '][content]';
+        newItem.getElementsByClassName('up').item(0).onclick = () => upCardItem(idx);
+        newItem.getElementsByClassName('down').item(0).onclick = () => downCardItem(idx);
+        cardList.appendChild(newItem);
     }
 
-    function openFileSelect() {
+    function openImgSelector() {
         const cardList = document.getElementById('card-list');
-        const newCardItem = document.getElementById('photo-item-prototype').cloneNode(true);
+        const newItem = document.getElementById('photo-item-prototype').cloneNode(true);
         const idx = cardList.children.length;
-        newCardItem.getElementsByClassName('card-id').item(0).name = 'project[project_cards_attributes][' + idx + '][card_id]';
-        newCardItem.getElementsByClassName('card-id').item(0).value = 0;
-        newCardItem.getElementsByClassName('card-img-file').item(0).name = 'project[project_cards_attributes][' + idx + '][img]';
-        newCardItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards_attributes][' + idx + '][content]';
-        cardList.appendChild(newCardItem);
-        newCardItem.getElementsByClassName('card-img-file').item(0).click();
-        newCardItem.getElementsByClassName('card-img-file').item(0).onchange = function(e) {
-            if(e.target.value !== '') {
-                newCardItem.style = 'display: block;';
-                const oFReader = new FileReader();
-                oFReader.readAsDataURL(newCardItem.getElementsByClassName('card-img-file').item(0).files[0]);
+        newItem.class = 'card-item';
+        newItem.getElementsByClassName('card-id').item(0).name = 'project[project_cards][' + idx + '][card_id]';
+        newItem.getElementsByClassName('card-id').item(0).value = 0;
+        newItem.getElementsByClassName('card-position').item(0).name = 'project[project_cards][' + idx + '][position]';
+        newItem.getElementsByClassName('card-position').item(0).value = idx;
+        newItem.getElementsByClassName('card-img-file').item(0).name = 'project[project_cards][' + idx + '][img]';
+        newItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards][' + idx + '][content]';
+        newItem.getElementsByClassName('up').item(0).onclick = () => upCardItem(idx);
+        newItem.getElementsByClassName('down').item(0).onclick = () => downCardItem(idx);
+        cardList.appendChild(newItem);
 
+        newItem.getElementsByClassName('card-img-file').item(0).onchange = function (e) {
+            if (e.target.value) {
+                newItem.style['display'] = 'block';
+                const oFReader = new FileReader();
+                oFReader.readAsDataURL(newItem.getElementsByClassName('card-img-file').item(0).files[0]);
                 oFReader.onload = function (oFREvent) {
-                    newCardItem.getElementsByClassName('card-img').item(0).src = oFREvent.target.result;
+                    newItem.getElementsByClassName('card-img').item(0).src = oFREvent.target.result;
                 };
             } else {
-                cardList.removeChild(newCardItem);
+                cardList.removeChild(newItem);
             }
         };
+        newItem.getElementsByClassName('card-img-file').item(0).click();
     }
 
-    // const eventBus = new Vue();
-    //
-    // const cardItem = {
-    //     template: '<div>hi</div>'
-    // }
-    // new Vue({
-    //     el: '#card-list',
-    //     data: {
-    //         cards: ['a', 'b', 'c']
-    //     },
-    //     components: {
-    //         'card-item': cardItem
-    //     }
-    // });
+    function upCardItem(idx) {
+        if (idx == 0) {
+            return;
+        }
+        swapItemPosition(idx - 1, idx);
+    }
+
+    function downCardItem(idx) {
+        if (idx == document.getElementById('card-list').children.length - 1) {
+            return;
+        }
+        swapItemPosition(idx, idx + 1);
+    }
+
+    function swapItemPosition(aIdx, bIdx) {
+        const cardList = document.getElementById('card-list');
+        const aItem = cardList.children[aIdx];
+        const bItem = cardList.children[bIdx];
+        if (aIdx < bIdx) {
+            cardList.insertBefore(bItem, aItem);
+        } else {
+            cardList.insertBefore(aItem, bItem);
+        }
+        const aPosition = aItem.getElementsByClassName('card-position').item(0).value;
+        const bPosition = bItem.getElementsByClassName('card-position').item(0).value;
+        aItem.getElementsByClassName('card-position').item(0).value = bPosition;
+        aItem.getElementsByClassName('up').item(0).onclick = () => upCardItem(bIdx);
+        aItem.getElementsByClassName('down').item(0).onclick = () => downCardItem(bIdx);
+        bItem.getElementsByClassName('card-position').item(0).value = aPosition;
+        bItem.getElementsByClassName('up').item(0).onclick = () => upCardItem(aIdx);
+        bItem.getElementsByClassName('down').item(0).onclick = () => downCardItem(aIdx);
+    }
 </script>
 

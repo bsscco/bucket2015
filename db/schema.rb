@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_18_034902) do
+ActiveRecord::Schema.define(version: 2018_08_09_083403) do
 
   create_table "cards", force: :cascade do |t|
     t.integer "user_id"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2018_07_18_034902) do
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position"
     t.index ["card_id"], name: "index_project_cards_on_card_id"
     t.index ["project_id"], name: "index_project_cards_on_project_id"
   end

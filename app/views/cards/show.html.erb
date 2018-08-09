@@ -1,4 +1,14 @@
-<p id="notice"><%= notice %></p>
-
-<%= link_to 'Edit', edit_card_path(@card) %> |
-<%= link_to 'Back', cards_path %>
+<div class="container" style="margin-top: 20px;">
+  <div class="card">
+    <img class="card-img-top" src="<%= @card.img %>" alt="Card image cap">
+    <div class="card-body">
+      <p class="card-text"><%= @card.content %></p>
+    </div>
+    <% if current_user && @card.user_id == current_user.id %>
+      <div class="card-body">
+        <a href="<%= edit_card_path(@card) %>">수정</a>
+        <a href="<%= card_path(@card) %>" data-method="delete" data-confirm="진짜?">삭제</a>
+      </div>
+    <% end %>
+  </div>
+</div>

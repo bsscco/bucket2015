@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   resources :projects
-  devise_for :users, controllers: { registrations: 'users/registrations' }
-  root 'cards#index'
-
   resources :cards
 
+  devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions'  }
+
+  root 'cards#index'
 end
