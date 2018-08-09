@@ -67,9 +67,13 @@ class ProjectsController < ApplicationController
     project_cards_params.each do |project_card_params|
       if project_card_params[1][:id] && project_card_params[1][:id] != "0"
         project_card = @project.project_cards.find_by(id: project_card_params[1][:id])
-        project_card.position = project_card_params[1][:position]
-        project_card.content = project_card_params[1][:content]
-        project_card.save
+        if project_card_params[1][:_destroy] == 'true'
+          project_card.delete
+        else
+          project_card.position = project_card_params[1][:position]
+          project_card.content = project_card_params[1][:content]
+          project_card.save
+        end
       elsif project_card_params[1][:card_id] == "0"
         new_card = Card.new(img: project_card_params[1][:img], content: project_card_params[1][:content])
         new_card.user = current_user;

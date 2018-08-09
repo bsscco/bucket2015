@@ -18,16 +18,10 @@
       </div>
     <% end %>
 
-    <div class="form-group">
-      <label>사진</label>
-      <img id="card-img" style="width: 100%;" src="<%= @card.img %>"><br>
-      <input type="file" class="form-control-file" accept="image/*" name="card[img]" onchange="onImgSelected(this)" id="card-img-file">
-    </div>
+    <img id="card-img" src="<%= @card.img %>" style="width: 100%; border-radius: 3px; border: 1px solid lightgray; width: 100%;"><br>
+    <input type="file" class="form-control-file" accept="image/*" name="card[img]" onchange="onImgSelected(this)" id="card-img-file">
 
-    <div class="form-group">
-      <label>내용</label>
-      <textarea class="form-control" rows="3" name="card[content]"><%= @card.content %></textarea>
-    </div>
+    <textarea class="form-control" rows="3" name="card[content]" style="margin: 10px 0 20px 0;"><%= @card.content %></textarea>
 
     <input type="submit" class="btn btn-primary" name="commit" value="<%= @card.id ? '수정하기' : '만들기' %>">
   </form>

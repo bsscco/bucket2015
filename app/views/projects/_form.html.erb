@@ -37,18 +37,19 @@
 
     <div id="card-list">
       <% if @project.id %>
-        <% @project.project_cards.each_with_index do |m, idx| %>
+        <% @project.project_cards.order(:position).each_with_index do |m, idx| %>
           <div class="card-item" style="margin-bottom: 20px;">
-            <input type="hidden" name="project[project_cards][<%= idx %>][id]" value="<%= m.id %>">
+            <input class="project-card-id" type="hidden" name="project[project_cards][<%= idx %>][id]" value="<%= m.id %>">
+            <input class="project-card-destroy" type="hidden" name="project[project_cards][<%= idx %>][_destroy]" value="false">
             <input class="card-id" type="hidden" name="project[project_cards][<%= idx %>][card_id]" value="<%= m.card_id %>">
             <input class="card-position" type="hidden" name="project[project_cards][<%= idx %>][position]" value="<%= m.position %>">
             <div>
-              <div style="display: inline-block;">
+              <div style="position: absolute; margin: 10px;">
                 <button type="button" class="btn btn-light up" style="width: 100px;" onclick="upCardItem(<%= idx %>)">위로</button>
-                <br>
                 <button type="button" class="btn btn-light down" style="width: 100px;" onclick="downCardItem(<%= idx %>)">아래로</button>
+                <button type="button" class="btn btn-secondary up" onclick="deleteCardItem(<%= idx %>)">X</button>
               </div>
-              <img class="card-img" style="width: auto;" src="<%= m.card.img %>"><br>
+              <img class="card-img" src="<%= m.card.img %>" style="border: 1px solid lightgray;"><br>
             </div>
             <textarea class="card-content form-control" rows="3" style="margin-top: 10px;" name="project[project_cards][<%= idx %>][content]"><%= m.content %></textarea>
           </div>
@@ -66,12 +67,12 @@
   <input class="card-id" type="hidden">
   <input class="card-position" type="hidden">
   <div>
-    <div style="display: inline-block;">
+    <div style="position: absolute; margin: 10px;">
       <button type="button" class="btn btn-light up" style="width: 100px;">위로</button>
-      <br>
       <button type="button" class="btn btn-light down" style="width: 100px;">아래로</button>
+      <button type="button" class="btn btn-secondary up">X</button>
     </div>
-    <img class="card-img" style="width: auto;"><br>
+    <img class="card-img" style="border: 1px solid lightgray;"><br>
   </div>
   <textarea class="card-content form-control" rows="3" style="margin-top: 10px;"></textarea>
 </div>
@@ -80,13 +81,13 @@
   <input class="card-id" type="hidden">
   <input class="card-position" type="hidden">
   <div>
-    <div style="display: inline-block;">
+    <div style="position: absolute; margin: 10px;">
       <button type="button" class="btn btn-light up" style="width: 100px;">위로</button>
-      <br>
       <button type="button" class="btn btn-light down" style="width: 100px;">아래로</button>
+      <button type="button" class="btn btn-secondary up">X</button>
     </div>
     <input style="display: none;" type="file" class="card-img-file" accept="image/*" data-path="uploads/cards/projects" multiple="multiple">
-    <img class="card-img" style="width: auto;"><br>
+    <img class="card-img" style="border: 1px solid lightgray;"><br>
   </div>
   <textarea class="card-content form-control" rows="3" style="margin-top: 10px;"></textarea>
 </div>
@@ -170,6 +171,15 @@
         bItem.getElementsByClassName('card-position').item(0).value = aPosition;
         bItem.getElementsByClassName('up').item(0).onclick = () => upCardItem(aIdx);
         bItem.getElementsByClassName('down').item(0).onclick = () => downCardItem(aIdx);
+    }
+
+    function deleteCardItem(idx) {
+        const cardList = document.getElementById('card-list');
+        const currItem = cardList.children[idx];
+        if (currItem.getElementsByClassName('project-card-id').item(0)) {
+            currItem.style['display'] = 'none';
+            currItem.getElementsByClassName('project-card-destroy').item(0).value = true;
+        }
     }
 </script>
 
