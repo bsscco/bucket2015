@@ -4,4 +4,6 @@ class Card < ApplicationRecord
   has_many :projects, through: :project_cards
 
   mount_uploader :img, S3Uploader
+
+  paginates_per 10
 end

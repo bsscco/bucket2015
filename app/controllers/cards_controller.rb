@@ -5,7 +5,8 @@ class CardsController < ApplicationController
   # GET /cards
   # GET /cards.json
   def index
-    @cards = Card.all
+    @page = Card.page(params[:page]).per(10)
+    @cards = Card.order(created_at: :desc).page(@page.current_page).per(@page.limit_value)
   end
 
   # GET /cards/1

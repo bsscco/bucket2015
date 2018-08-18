@@ -1,5 +1,5 @@
 <div class="container" style="margin-top: 20px;">
-  <form enctype="multipart/form-data" action="<%= project.id ? ("/projects/#{@project.id}") : '/projects' %>" accept-charset="UTF-8" method="post">
+  <form enctype="multipart/form-data" action="<%= @project.id ? ("/projects/#{@project.id}") : '/projects' %>" accept-charset="UTF-8" method="post">
     <input name="utf8" type="hidden" value="✓">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
     <% if @project.id %>

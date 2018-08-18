@@ -5,7 +5,8 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all
+    @page = Project.page(params[:page]).per(10)
+    @projects = Project.all.order(created_at: :desc).page(@page.current_page).per(@page.limit_value)
   end
 
   # GET /projects/1
