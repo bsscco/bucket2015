@@ -1,4 +1,4 @@
-<div class="container" style="margin-top: 20px;">
+<div class="container" style="margin-top: 20px; margin-bottom: 20px;">
   <form enctype="multipart/form-data" action="<%= @project.id ? ("/projects/#{@project.id}") : '/projects' %>" accept-charset="UTF-8" method="post">
     <input name="utf8" type="hidden" value="✓">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
@@ -47,7 +47,7 @@
               <div style="position: absolute; margin: 10px;">
                 <button type="button" class="btn btn-light up" style="width: 100px;" onclick="upCardItem(<%= idx %>)">위로</button>
                 <button type="button" class="btn btn-light down" style="width: 100px;" onclick="downCardItem(<%= idx %>)">아래로</button>
-                <button type="button" class="btn btn-secondary up" onclick="deleteCardItem(<%= idx %>)">X</button>
+                <button type="button" class="btn btn-secondary delete" onclick="deleteCardItem(<%= idx %>)">X</button>
               </div>
               <img class="card-img" src="<%= m.card.img %>" style="border: 1px solid lightgray;"><br>
             </div>
@@ -70,7 +70,7 @@
     <div style="position: absolute; margin: 10px;">
       <button type="button" class="btn btn-light up" style="width: 100px;">위로</button>
       <button type="button" class="btn btn-light down" style="width: 100px;">아래로</button>
-      <button type="button" class="btn btn-secondary up">X</button>
+      <button type="button" class="btn btn-secondary delete">X</button>
     </div>
     <img class="card-img" style="border: 1px solid lightgray;"><br>
   </div>
@@ -84,7 +84,7 @@
     <div style="position: absolute; margin: 10px;">
       <button type="button" class="btn btn-light up" style="width: 100px;">위로</button>
       <button type="button" class="btn btn-light down" style="width: 100px;">아래로</button>
-      <button type="button" class="btn btn-secondary up">X</button>
+      <button type="button" class="btn btn-secondary delete">X</button>
     </div>
     <input style="display: none;" type="file" class="card-img-file" accept="image/*" data-path="uploads/cards/projects" multiple="multiple">
     <img class="card-img" style="border: 1px solid lightgray;"><br>
@@ -107,6 +107,7 @@
         newItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards][' + idx + '][content]';
         newItem.getElementsByClassName('up').item(0).onclick = () => upCardItem(idx);
         newItem.getElementsByClassName('down').item(0).onclick = () => downCardItem(idx);
+        newItem.getElementsByClassName('delete').item(0).onclick = () => deleteCardItem(idx);
         cardList.appendChild(newItem);
     }
 
@@ -123,6 +124,7 @@
         newItem.getElementsByClassName('card-content').item(0).name = 'project[project_cards][' + idx + '][content]';
         newItem.getElementsByClassName('up').item(0).onclick = () => upCardItem(idx);
         newItem.getElementsByClassName('down').item(0).onclick = () => downCardItem(idx);
+        newItem.getElementsByClassName('delete').item(0).onclick = () => deleteCardItem(idx);
         cardList.appendChild(newItem);
 
         newItem.getElementsByClassName('card-img-file').item(0).onchange = function (e) {
@@ -131,6 +133,7 @@
                 const oFReader = new FileReader();
                 oFReader.readAsDataURL(newItem.getElementsByClassName('card-img-file').item(0).files[0]);
                 oFReader.onload = function (oFREvent) {
+                    console.log(oFREvent.target.result);
                     newItem.getElementsByClassName('card-img').item(0).src = oFREvent.target.result;
                 };
             } else {
@@ -179,7 +182,11 @@
         if (currItem.getElementsByClassName('project-card-id').item(0)) {
             currItem.style['display'] = 'none';
             currItem.getElementsByClassName('project-card-destroy').item(0).value = true;
+        }else {
+            cardList.removeChild(idx);
+            /*TODO 삭제하고 필요한 곳들 idx 전부 바꿔줘야 함.*/
         }
+
     }
 </script>
 

@@ -1,24 +1,7 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Vue
+- [Rails에서 Webpack을 사용해서 Vue 붙이기](https://github.com/rails/webpacker)
+- [Rails뷰에서 Vue인스턴스로 props 넣어주기](https://medium.com/@devanflaherty/passing-props-to-vue-in-a-rails-view-56e287be9c2d)
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### 

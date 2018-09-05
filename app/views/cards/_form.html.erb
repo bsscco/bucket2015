@@ -1,4 +1,4 @@
-<div class="container" style="margin-top: 20px;">
+<div class="container" style="margin-top: 20px; margin-bottom: 20px;">
   <form enctype="multipart/form-data" action="<%= @card.id ? ("/cards/#{@card.id}") : '/cards' %>" accept-charset="UTF-8" method="post">
     <input name="utf8" type="hidden" value="✓">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
@@ -18,7 +18,7 @@
       </div>
     <% end %>
 
-    <img id="card-img" src="<%= @card.img %>" style="width: 100%; border-radius: 3px; border: 1px solid lightgray; width: 100%;"><br>
+    <img id="card-img" src="<%= @card.img %>" style="width: 100%; border-radius: 3px; border: 1px solid lightgray;"><br>
     <input type="file" class="form-control-file" accept="image/*" name="card[img]" onchange="onImgSelected(this)" id="card-img-file">
 
     <textarea class="form-control" rows="3" name="card[content]" style="margin: 10px 0 20px 0;"><%= @card.content %></textarea>
@@ -28,8 +28,8 @@
 </div>
 
 <script>
-    function onImgSelected() {
-        if (this.value !== '') {
+    function onImgSelected(e) {
+        if (e.value !== '') {
             const oFReader = new FileReader();
             oFReader.readAsDataURL(document.getElementById('card-img-file').files[0]);
             oFReader.onload = function (oFREvent) {

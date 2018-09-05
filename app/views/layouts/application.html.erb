@@ -5,7 +5,7 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%#= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
@@ -21,6 +21,7 @@
       <a href="<%= user_path(current_user) %>" class="btn btn-secondary" role="button">마이페이지</a>
       <a href="<%= new_card_path %>" class="btn btn-secondary" role="button">새 카드</a>
       <a href="<%= new_project_path %>" class="btn btn-secondary" role="button">새 집들이</a>
+      <a href="<%= new_advice_path %>" class="btn btn-secondary" role="button">새 노하우</a>
     <% else %>
       <a href="<%= new_user_session_path %>" class="btn btn-secondary" role="button">로그인</a>
       <a href="<%= new_user_registration_path %>" class="btn btn-secondary" role="button">회원가입</a>
@@ -36,6 +37,9 @@
     </li>
     <li class="nav-item">
       <a class="nav-link<%= ' active' if request.path == projects_path %>" href="<%= projects_path %>">집들이피드</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link<%= ' active' if request.path == advices_path %>" href="<%= advices_path %>">노하우피드</a>
     </li>
   </ul>
 </div>

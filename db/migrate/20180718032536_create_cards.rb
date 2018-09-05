@@ -1,7 +1,7 @@
 class CreateCards < ActiveRecord::Migration[5.2]
   def change
     create_table :cards do |t|
-      t.references :user
+      t.belongs_to :user
       t.string :content
       t.string :img
 
