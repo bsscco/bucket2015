@@ -34,6 +34,8 @@ class CardsController < ApplicationController
 
     respond_to do |format|
       if @card.save
+        @card.img_url0 = @card.img.url
+        @card.save
         format.html { redirect_to @card, notice: 'Card was successfully created.' }
         format.json { render :show, status: :created, location: @card }
       else

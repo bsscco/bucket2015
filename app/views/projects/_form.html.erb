@@ -22,9 +22,9 @@
       <label>내 사진 목록</label><br>
       <% current_user.cards.each do |card| %>
         <div class="card" style="width: 10rem; display:inline-flex">
-          <img class="card-img-top" src="<%= card.img %>" alt="Card image cap">
+          <img class="card-img-top" src="<%= card.img_url0 %>" alt="Card image cap">
           <div class="card-body">
-            <div class="btn btn-link" onclick="addCardItem(<%= card.id %>, '<%= card.img %>')">사진 추가</div>
+            <div class="btn btn-link" onclick="addCardItem(<%= card.id %>, '<%= card.img_url0 %>')">사진 추가</div>
           </div>
         </div>
       <% end %>
@@ -49,7 +49,7 @@
                 <button type="button" class="btn btn-light down" style="width: 100px;" onclick="downCardItem(<%= idx %>)">아래로</button>
                 <button type="button" class="btn btn-secondary delete" onclick="deleteCardItem(<%= idx %>)">X</button>
               </div>
-              <img class="card-img" src="<%= m.card.img %>" style="border: 1px solid lightgray;"><br>
+              <img class="card-img" src="<%= m.card.img_url0 %>" style="border: 1px solid lightgray;"><br>
             </div>
             <textarea class="card-content form-control" rows="3" style="margin-top: 10px;" name="project[project_cards][<%= idx %>][content]"><%= m.content %></textarea>
           </div>

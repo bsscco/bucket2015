@@ -4,6 +4,7 @@ class CreateCards < ActiveRecord::Migration[5.2]
       t.belongs_to :user
       t.string :content
       t.string :img
+      t.string :img_url0
 
       t.timestamps
     end

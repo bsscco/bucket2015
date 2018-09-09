@@ -1,5 +1,5 @@
 <div class="container" style="margin-top: 20px;">
-  <img class="card-img-top" src="<%= @card.img %>" alt="Card image cap" style="border-radius: 3px; border: 1px solid lightgray; width: 100%;">
+  <img class="card-img-top" src="<%= @card.img_url0 %>" alt="Card image cap" style="border-radius: 3px; border: 1px solid lightgray; width: 100%;">
   <p><%= @card.content %></p>
   <% if current_user && @card.user_id == current_user.id %>
     <a href="<%= edit_card_path(@card) %>">수정</a>

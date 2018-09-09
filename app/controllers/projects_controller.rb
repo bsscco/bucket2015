@@ -35,6 +35,8 @@ class ProjectsController < ApplicationController
         new_card = Card.new(img: project_card_params[1][:img], content: project_card_params[1][:content])
         new_card.user = current_user;
         new_card.save
+        new_card.img_url0 = new_card.img.url
+        new_card.save
         new_project_card = ProjectCard.new
         new_project_card.card_id = new_card.id;
         new_project_card.position = project_card_params[1][:position];
@@ -78,6 +80,8 @@ class ProjectsController < ApplicationController
       elsif project_card_params[1][:card_id] == "0"
         new_card = Card.new(img: project_card_params[1][:img], content: project_card_params[1][:content])
         new_card.user = current_user;
+        new_card.save
+        new_card.img_url0 = new_card.img.url
         new_card.save
         new_project_card = ProjectCard.new
         new_project_card.card_id = new_card.id;

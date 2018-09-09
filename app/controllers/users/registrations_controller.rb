@@ -12,6 +12,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
+    @user.save
+    @user.avatar_url0 = @user.avatar.url
+    @user.save
   end
 
   # GET /resource/edit

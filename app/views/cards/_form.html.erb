@@ -18,7 +18,7 @@
       </div>
     <% end %>
 
-    <img id="card-img" src="<%= @card.img %>" style="width: 100%; border-radius: 3px; border: 1px solid lightgray;"><br>
+    <img id="card-img" src="<%= @card.img_url0 %>" style="width: 100%; border-radius: 3px; border: 1px solid lightgray;"><br>
     <input type="file" class="form-control-file" accept="image/*" name="card[img]" onchange="onImgSelected(this)" id="card-img-file">
 
     <textarea class="form-control" rows="3" name="card[content]" style="margin: 10px 0 20px 0;"><%= @card.content %></textarea>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_091838) do
+ActiveRecord::Schema.define(version: 2018_08_27_091842) do
 
   create_table "advice_contents", force: :cascade do |t|
     t.integer "advice_id"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_091838) do
     t.string "link"
     t.string "img"
     t.integer "position"
+    t.string "img_url0"
     t.index ["advice_id"], name: "index_advice_contents_on_advice_id"
   end
 
@@ -31,6 +32,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_091838) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "cover"
+    t.string "cover_url0"
     t.index ["user_id"], name: "index_advices_on_user_id"
   end
 
@@ -38,6 +40,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_091838) do
     t.integer "user_id"
     t.string "content"
     t.string "img"
+    t.string "img_url0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_cards_on_user_id"
@@ -77,6 +80,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_091838) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "avatar"
+    t.string "avatar_url0"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
