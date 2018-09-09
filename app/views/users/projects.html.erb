@@ -11,12 +11,12 @@
       <div class="card">
         <div class="card border-white">
           <a href="<%= project_path(m) %>" style="color: inherit;">
-            <img class="card-img" style="padding: 0.5rem; height: 300px; object-fit: cover;" src="<%= m.cards.length >= 1 ? m.cards[0].img_url : '#' %>" alt="Project image cap">
+            <img class="card-img" style="padding: 0.5rem; height: 300px; object-fit: cover;" src="<%= m.cards.length >= 1 ? m.cards[0].img_url0 : '#' %>" alt="Project image cap">
             <div class="card-img-overlay d-flex align-items-center" style="margin: 0.5rem; background-color: rgba(0, 0, 0, 0.3)">
               <div class="card-body text-light">
                 <h4 class="card-title text-center"><%= m.title %></h4>
                 <div class="text-center">
-                  <img src="<%= m.user.avatar %>" class="rounded-circle" style="display: inline-block; width: 2rem; height: 2rem;" alt="avatar" onerror="this.src='https://orig00.deviantart.net/9b06/f/2012/034/d/2/facebook_avatar___pikachu_by_heatphoenix-d4ojd5a.png'">
+                  <img src="<%= m.user.avatar_url0 %>" class="rounded-circle" style="display: inline-block; width: 2rem; height: 2rem;" alt="avatar" onerror="this.src='https://orig00.deviantart.net/9b06/f/2012/034/d/2/facebook_avatar___pikachu_by_heatphoenix-d4ojd5a.png'">
                   <h5 class="card-title" style="display: inline-block;"><%= m.user.nickname %></h5>
                 </div>
               </div>

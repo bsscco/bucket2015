@@ -10,10 +10,10 @@
     <div class="col-4">
       <div class="card">
         <div class="card-header">
-          <img src="<%= m.user.avatar %>" class="rounded-circle" style="display: inline-block; width: 2rem; height: 2rem;" alt="avatar" onerror="this.src='https://orig00.deviantart.net/9b06/f/2012/034/d/2/facebook_avatar___pikachu_by_heatphoenix-d4ojd5a.png'">
+          <img src="<%= m.user.avatar_url0 %>" class="rounded-circle" style="display: inline-block; width: 2rem; height: 2rem;" alt="avatar" onerror="this.src='https://orig00.deviantart.net/9b06/f/2012/034/d/2/facebook_avatar___pikachu_by_heatphoenix-d4ojd5a.png'">
           <h5 class="card-title" style="display: inline-block;"><%= m.user.nickname %></h5>
         </div>
-        <a href="<%= card_path(m) %>"><img class="card-img-top" style="padding: 0.5rem; height: 300px; object-fit: cover;" src="<%= m.img_url %>" alt="Card image cap"></a>
+        <a href="<%= card_path(m) %>"><img class="card-img-top" style="padding: 0.5rem; height: 300px; object-fit: cover;" src="<%= m.img_url0 %>" alt="Card image cap"></a>
         <div class="card-body">
           <p class="card-text"><%= m.content %></p>
         </div>
