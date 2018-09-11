@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :cards, :projects]
+  before_action :set_user, only: [:show, :cards, :projects, :advices]
 
   # GET /users/1
   # GET /users/1.json
@@ -16,6 +16,12 @@ class UsersController < ApplicationController
   def projects
     @page = @user.projects.page(params[:page]).per(10)
     @projects = @user.projects.order(created_at: :desc).page(@page.current_page).per(@page.limit_value)
+  end
+
+  # GET /users/1/advices
+  def advices
+    @page = @user.advices.page(params[:page]).per(10)
+    @advices = @user.advices.order(created_at: :desc).page(@page.current_page).per(@page.limit_value)
   end
 
   private

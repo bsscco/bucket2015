@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   get 'users/:id' => 'users#show', as: :user
   get 'users/:id/cards' => 'users#cards', as: :user_cards
   get 'users/:id/projects' => 'users#projects', as: :user_projects
+  get 'users/:id/advices' => 'users#advices', as: :user_advices
 end
