@@ -1,0 +1,36 @@
+<div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+  <%= render 'layouts/page_bar', path: projects_path %>
+
+  <% @advices.each_with_index do |m, idx| %>
+    <% if idx % 3 == 0 %>
+      <div class="row" style="margin-bottom: 20px;">
+    <% end %>
+    <div class="col-4">
+      <div class="card">
+        <div class="card border-white">
+          <a href="<%= advice_path(m) %>" style="color: inherit;">
+            <img class="card-img" style="padding: 0.5rem; height: 300px; object-fit: cover;" src="<%= m.cover_url0 %>" alt="Advice image cap">
+            <div class="card-img-overlay d-flex align-items-center" style="margin: 0.5rem; background-color: rgba(0, 0, 0, 0.3)">
+              <div class="card-body text-light">
+                <h4 class="card-title text-center"><%= m.title %></h4>
+                <div class="text-center">
+                  <img src="<%= m.user.avatar_url0 %>" class="rounded-circle" style="display: inline-block; width: 2rem; height: 2rem;" alt="avatar" onerror="this.src='https://orig00.deviantart.net/9b06/f/2012/034/d/2/facebook_avatar___pikachu_by_heatphoenix-d4ojd5a.png'">
+                  <h5 class="card-title" style="display: inline-block;"><%= m.user.nickname %></h5>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <% if current_user && m.user_id == current_user.id %>
+          <div class="card-body">
+            <a href="<%= edit_advice_path(m) %>">수정</a>
+            <a href="<%= advice_path(m) %>" data-method="delete" data-confirm="진짜?">삭제</a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <% if idx % 3 == 2 %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
