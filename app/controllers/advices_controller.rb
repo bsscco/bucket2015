@@ -1,11 +1,17 @@
 class AdvicesController < ApplicationController
+  # Edit, Update, Destroy에 대한 보안이슈를 해결해주세요. (자기 자신만 수정, 삭제 가능하게)
   before_action :set_advice, only: [:show, :edit, :update, :destroy]
 
   # GET /advices
   # GET /advices.json
   def index
+    # params[:page]의 Default 값을 설정해 주면 좋을 것 같아요. > 빈값으로 오는경우 에러 발생
+    
     @page = Advice.page(params[:page]).per(10)
     @advices = Advice.all.order(created_at: :desc).page(@page.current_page).per(@page.limit_value)
+    # 어떤 연유인지 모르겠지만, 위와 같이 호출하면 @page와 @advice의 내용이 같을것 같은데 위와 같이 호출하면 2번 쿼리를 타게 됩니다.
+    # @advices = Advice.all.order(created_at: :desc).page(@page.current_page).per(@page.limit_value)
+    # @page = @advices  # for draw custom paginate
   end
 
   # GET /advices/1
@@ -25,9 +31,14 @@ class AdvicesController < ApplicationController
   # POST /advices
   # POST /advices.json
   def create
+    # Strong Parameter 를 사용해보세요.
+    # https://edgeguides.rubyonrails.org/action_controller_overview.html#strong-parameters
+    
     @advice = Advice.new(title: params[:advice][:title], cover: params[:advice][:cover])
     @advice.user = current_user
     advice_contents_params = params[:advice][:advice_contents];
+    
+    # 이부분을 하는 이유가 궁금합니다. 
     advice_contents_params.each do |advice_content_params|
       new_advice_content = nil
       content_type = advice_content_params[1][:content_type];
@@ -48,6 +59,7 @@ class AdvicesController < ApplicationController
 
     respond_to do |format|
       if @advice.save
+        # 이부분은 제가 이해가 잘안되서 그러는데 설명듣고 주석을 해드릴게요!
         @advice.cover_url0 = @advice.cover.url
         @advice.advice_contents.each do |advice_content|
           if advice_content.content_type == "photo"
@@ -67,6 +79,8 @@ class AdvicesController < ApplicationController
   # PATCH/PUT /advices/1
   # PATCH/PUT /advices/1.json
   def update
+    # Create와 같은 맥락으로 Strong Parameter를 이용해보세요.
+    
     @advice.title = params[:advice][:title];
     advice_contents_params = params[:advice][:advice_contents];
     advice_contents_params.each do |advice_content_params|
@@ -138,11 +152,13 @@ class AdvicesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_advice
+    # Advice가 없을때 예외 처리가 필요
     @advice = Advice.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def advice_params
+    # strong parameter 필요
     params.fetch(:advice, {})
   end
 end
